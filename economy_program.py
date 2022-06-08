@@ -1,3 +1,6 @@
+def improve_your_finances():
+    pass
+
 def carreer_and_salary(dic, number):
     carreer = {
         1: ['Industrial Engineer', 2256],
@@ -21,7 +24,7 @@ def database(nested_list):
             carreer_and_salary(i, 3)
         elif i['name'][0] == 'G':
             carreer_and_salary(i, 4)
-    print(nested_list)
+    improve_your_finances(nested_list)
 
 def str_name_age(figure_or_character):
     # ['c', 'a', 'r', 'l', 'o', 's'] -> figure_or_character = 'Carlos'
