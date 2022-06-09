@@ -1,12 +1,27 @@
+def filter_data(database):
+    # Another option:
+    #person_capable_house = [person['name'] for person in database if person['yrs_tobuyhouse'] <= 10]
+    profitable_house = list(filter(lambda person : person['yrs_tobuyhouse'] <= 10, database))
+    profitable_car = list(filter(lambda person : person['yrs_tobuycar'] <= 10, database))
+    person_capable_house = list(map(lambda person: person['name'], profitable_house))
+    person_capable_car = list(map(lambda person: person['name'], profitable_car)) 
+    print(f"""
+People able to buy a home in less than 10 years or equal to this amount:
+{person_capable_house}
+""")
+    print(f"""People able to buy a car in less than 10 years or equal to this amount:
+{person_capable_car}""")
+
+
 def calculate_years(database, dic, percentage):
-    #[{'name': 'Carlos Orejuela', 'age': 19, 'carreer': 'Industrial Engineer', 'salary': 2256, 
+    #database = [{'name': 'Carlos Orejuela', 'age': 19, 'carreer': 'Industrial Engineer', 'salary': 2256, 
     # 'yrs_tobuyhouse': 18, 'yrs_tobuycar': 8}]
     for i in database:
         for good, value in dic.items():
             save = i['salary']*percentage
             good_years = int((value / save) / 12)
             i[f'yrs_tobuy{good}'] = good_years
-    print(database)
+    filter_data(database)
 
 def improve_your_finances(nested_list):
     print("""
@@ -15,13 +30,16 @@ From here you can save to buy a new house, a new car, etc.
 And this program calculates how many years each person can buy it. 
 """)
     percentage_saving = 0.3
-    house_price = int(input("House's price: "))
-    car_price = int(input("Car's price: "))
-    dic_goods = {
-        'house': house_price,
-        'car': car_price,
-    }
-    calculate_years(nested_list, dic_goods, percentage_saving)
+    try:
+        house_price = int(input("House's price: "))
+        car_price = int(input("Car's price: "))
+        dic_goods = {
+            'house': house_price,
+            'car': car_price,
+        }
+        calculate_years(nested_list, dic_goods, percentage_saving)
+    except ValueError:
+        print("It's not allowed str")
 
 def carreer_and_salary(dic, number):
     carreer = {
