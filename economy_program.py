@@ -1,3 +1,6 @@
+#A los cuantos años tendrá su casa y su carro
+#Cuanto deben ahorrar para que puedan comprar su casa en 10 años. Si es %>60 = No es rentable
+
 def filter_data(database):
     # Another option:
     #person_capable_house = [person['name'] for person in database if person['yrs_tobuyhouse'] <= 10]
