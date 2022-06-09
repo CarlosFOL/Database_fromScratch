@@ -1,5 +1,27 @@
-def improve_your_finances():
-    pass
+def calculate_years(database, dic, percentage):
+    #[{'name': 'Carlos Orejuela', 'age': 19, 'carreer': 'Industrial Engineer', 'salary': 2256, 
+    # 'yrs_tobuyhouse': 18, 'yrs_tobuycar': 8}]
+    for i in database:
+        for good, value in dic.items():
+            save = i['salary']*percentage
+            good_years = int((value / save) / 12)
+            i[f'yrs_tobuy{good}'] = good_years
+    print(database)
+
+def improve_your_finances(nested_list):
+    print("""
+The most recommended in the personal finance is to save 30% of your salary.
+From here you can save to buy a new house, a new car, etc.
+And this program calculates how many years each person can buy it. 
+""")
+    percentage_saving = 0.3
+    house_price = int(input("House's price: "))
+    car_price = int(input("Car's price: "))
+    dic_goods = {
+        'house': house_price,
+        'car': car_price,
+    }
+    calculate_years(nested_list, dic_goods, percentage_saving)
 
 def carreer_and_salary(dic, number):
     carreer = {
