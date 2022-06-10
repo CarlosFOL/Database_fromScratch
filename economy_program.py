@@ -1,20 +1,67 @@
 #A los cuantos años tendrá su casa y su carro
-#Cuanto deben ahorrar para que puedan comprar su casa en 10 años. Si es %>60 = No es rentable
 
-def filter_data(database):
-    # Another option:
-    #person_capable_house = [person['name'] for person in database if person['yrs_tobuyhouse'] <= 10]
+def save_recommended(dic_unableperson, good_price):
+    dic_percentage = {}
+    save_percentage = 0.3
+    years = 0
+    for k, v in dic_unableperson.items():
+        save = v*save_percentage
+        years = int(round((good_price/save) / 12, 0))
+        while (years > 10):
+            save_percentage += 0.1
+            save = v*save_percentage
+            years = int(round((good_price/save) / 12, 0))
+        if round(save_percentage, 0) < 0.8:
+            dic_percentage[k] = (save_percentage*100)
+    return dic_percentage
+
+def unable_topayit(list, base, good_price):
+    unable_person_topayit = {}
+    for i in list:
+        dic = {i: key['salary'] for key in base if key['yrs_tobuyhouse']>10 and i == key['name']}
+        unable_person_topayit = unable_person_topayit | dic
+    return save_recommended(unable_person_topayit, good_price)
+
+def second_filter_data(database):
+    print("""
+If you want to save more to buy a house or car is fine, but save more than 80% of your salary isn't a good idea.
+For this reason, is better if you don't buy that house or car.
+
+SUITABLE CASES:
+""")
+    unprofitable_house = [person['name'] for person in database if person['yrs_tobuyhouse']>10]
+    unprofitable_car = [person['name'] for person in database if person['yrs_tobuycar']>10]
+    unable_person_house = unable_topayit(unprofitable_house, database, 120000)
+    unable_person_car = unable_topayit(unprofitable_car, database, 55000)
+    print('HOUSE---------------------------------------------')
+    for key, value in unable_person_house.items():
+        print(f"""{key} must save {value}% of his salary to buy the 120k house in less 10 years 
+or equal to this amount
+        """)
+    print('CAR-----------------------------------------------')
+    for key, value in unable_person_car.items():
+        print(f"""{key} must save {value}% of his salary to buy the 55k car in less 10 years 
+or equal to this amount
+        """)
+
+def first_filter_data(database):
     profitable_house = list(filter(lambda person : person['yrs_tobuyhouse'] <= 10, database))
     profitable_car = list(filter(lambda person : person['yrs_tobuycar'] <= 10, database))
     person_capable_house = list(map(lambda person: person['name'], profitable_house))
     person_capable_car = list(map(lambda person: person['name'], profitable_car)) 
     print(f"""
-People able to buy a home in less than 10 years or equal to this amount:
-{person_capable_house}
+------------------------------------------------------------------------------    
+People able to buy a $150k house in less than 10 years or equal to this amount 
+and saving 30% of his salary: {person_capable_house}                           
+------------------------------------------------------------------------------
 """)
-    print(f"""People able to buy a car in less than 10 years or equal to this amount:
-{person_capable_car}""")
-
+    print(f"""
+------------------------------------------------------------------------------
+People able to buy a $45k car in less than 10 years or equal to this amount 
+and saving 30% of his salary: {person_capable_car}
+------------------------------------------------------------------------------
+""")
+    second_filter_data(database)
 
 def calculate_years(database, dic, percentage):
     #database = [{'name': 'Carlos Orejuela', 'age': 19, 'carreer': 'Industrial Engineer', 'salary': 2256, 
@@ -22,9 +69,11 @@ def calculate_years(database, dic, percentage):
     for i in database:
         for good, value in dic.items():
             save = i['salary']*percentage
-            good_years = int((value / save) / 12)
+            good_years = int(round((value / save) / 12, 0))
             i[f'yrs_tobuy{good}'] = good_years
-    filter_data(database)
+    print(f"""Database constructed: 
+{database}""")
+    first_filter_data(database)
 
 def improve_your_finances(nested_list):
     print("""
@@ -34,8 +83,8 @@ And this program calculates how many years each person can buy it.
 """)
     percentage_saving = 0.3
     try:
-        house_price = int(input("House's price: "))
-        car_price = int(input("Car's price: "))
+        house_price = 120000
+        car_price = 55000         
         dic_goods = {
             'house': house_price,
             'car': car_price,
