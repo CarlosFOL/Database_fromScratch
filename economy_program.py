@@ -1,6 +1,6 @@
-#A los cuantos años tendrá su casa y su carro
 
-def save_recommended(dic_unableperson, good_price):
+def save_recommended(
+    dic_unableperson, good_price):
     dic_percentage = {}
     save_percentage = 0.3
     years = 0
@@ -15,12 +15,15 @@ def save_recommended(dic_unableperson, good_price):
             dic_percentage[k] = (save_percentage*100)
     return dic_percentage
 
-def unable_topayit(list, base, good_price):
+
+def unable_topayit(
+    list, base, good_price):
     unable_person_topayit = {}
     for i in list:
         dic = {i: key['salary'] for key in base if key['yrs_tobuyhouse']>10 and i == key['name']}
         unable_person_topayit = unable_person_topayit | dic
     return save_recommended(unable_person_topayit, good_price)
+
 
 def second_filter_data(database):
     print("""
@@ -44,6 +47,7 @@ or equal to this amount
 or equal to this amount
         """)
 
+
 def first_filter_data(database):
     profitable_house = list(filter(lambda person : person['yrs_tobuyhouse'] <= 10, database))
     profitable_car = list(filter(lambda person : person['yrs_tobuycar'] <= 10, database))
@@ -63,7 +67,9 @@ and saving 30% of his salary: {person_capable_car}
 """)
     second_filter_data(database)
 
-def calculate_years(database, dic, percentage):
+
+def calculate_years(
+    database, dic, percentage):
     #database = [{'name': 'Carlos Orejuela', 'age': 19, 'carreer': 'Industrial Engineer', 'salary': 2256, 
     # 'yrs_tobuyhouse': 18, 'yrs_tobuycar': 8}]
     for i in database:
@@ -75,6 +81,7 @@ def calculate_years(database, dic, percentage):
 {database}""")
     first_filter_data(database)
 
+
 def improve_your_finances(nested_list):
     print("""
 The most recommended in the personal finance is to save 30% of your salary.
@@ -82,18 +89,18 @@ From here you can save to buy a new house, a new car, etc.
 And this program calculates how many years each person can buy it. 
 """)
     percentage_saving = 0.3
-    try:
-        house_price = 120000
-        car_price = 55000         
-        dic_goods = {
-            'house': house_price,
-            'car': car_price,
+    house_price = 120000
+    car_price = 55000         
+    dic_goods = {
+        'house': house_price,
+        'car': car_price,
         }
-        calculate_years(nested_list, dic_goods, percentage_saving)
-    except ValueError:
-        print("It's not allowed str")
+    calculate_years(nested_list, dic_goods, 
+                    percentage_saving)
 
-def carreer_and_salary(dic, number):
+
+def carreer_and_salary(
+    dic, number):
     carreer = {
         1: ['Industrial Engineer', 2256],
         2: ['Architect', 2206],
@@ -104,6 +111,7 @@ def carreer_and_salary(dic, number):
         if k == number:
             dic['carreer'] = v[0]
             dic['salary'] = v[1]
+
 
 def database(nested_list):
     #neste_list = [{'name': 'Carlos', 'age': 19, 'carreer': 'Architect', 'salary': 2206}]
@@ -118,6 +126,7 @@ def database(nested_list):
             carreer_and_salary(i, 4)
     improve_your_finances(nested_list)
 
+
 def str_name_age(figure_or_character):
     # ['c', 'a', 'r', 'l', 'o', 's'] -> figure_or_character = 'Carlos'
     # ['1', '9'] -> int(figure_or_character) = 19
@@ -127,6 +136,7 @@ def str_name_age(figure_or_character):
     else:
         figure_or_character = figure_or_character.strip()
         return figure_or_character
+
 
 def check_character_or_number(var_1):
     # 'Carlos, 19' -> characters_name_list = ['c', 'a', 'r', 'l', 'o', 's']
@@ -143,6 +153,7 @@ def check_character_or_number(var_1):
             continue
     return characters_name_list, figure_age_list
 
+
 def structure_data(data):
     #First: dic = {'name': 'Carlos', 'age': 19}
     #Second: final_list = [{'name': 'Carlos', 'age': 19},
@@ -158,10 +169,12 @@ def structure_data(data):
         final_list.append(dic)
     database(final_list)
 
+
 def run():
     with open("./database.txt", 'r', encoding="utf-8") as f:
         data = [i.strip("\n") for i in f]
     structure_data(data)
+
 
 if __name__=='__main__':
     run()
